@@ -9,6 +9,6 @@
    codé en dur (aucune régression).
    =================================================================== */
 window.AZUREA_SUPABASE = {
-  url: "",       // ex : https://xxxxxxxx.supabase.co
-  anonKey: ""    // ex : eyJhbGciOiJIUzI1NiIsInR5cCI6...
+  url: "https://kpkxyyksxtaruidyummy.supabase.co",
+  anonKey: "sb_publishable_X_8EEngWfSChOPT59H9kbg_mpII7hKO"
 };
