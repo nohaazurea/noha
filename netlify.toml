@@ -1,0 +1,23 @@
+# ============================================================
+#  AZUREA — Configuration Netlify
+#  Site 100% statique (aucune étape de build).
+#  Le site public ET le back-office /admin sont servis tels quels.
+# ============================================================
+
+[build]
+  publish = "."
+  command = ""
+
+# En-têtes de sécurité de base
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Le back-office ne doit pas être indexé par les moteurs
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

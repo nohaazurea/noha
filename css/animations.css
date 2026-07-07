@@ -1,0 +1,57 @@
+/* ===================================================================
+   AZUREA — animations.css
+   Keyframes, loader, transition de page, curseur, masques de reveal,
+   et prise en charge de prefers-reduced-motion. Les animations GSAP sont dans js/animations.js.
+   =================================================================== */
+
+/* line-mask reveal */
+.lm{ display:block; overflow:hidden; }
+
+.lm > span{ display:block; will-change:transform; }
+
+/* ============================================================
+   Loader
+   ============================================================ */
+.loader{ position:fixed; inset:0; z-index:4000; background:var(--black); display:grid; place-items:center; }
+
+.loader__inner{ display:flex; flex-direction:column; align-items:center; gap:1.6rem; }
+
+.loader .logo{ height:74px; color:#EDE8E1; opacity:0; }
+
+.loader__bar{ width:180px; height:1px; background:rgba(237,232,225,.18); overflow:hidden; }
+
+.loader__bar i{ display:block; height:100%; width:100%; background:var(--accent); transform:scaleX(0); transform-origin:left; }
+
+.loader__pct{ font-size:.7rem; letter-spacing:.24em; color:rgba(237,232,225,.5); }
+
+body:not(.loading) .loader{ display:none; }
+
+/* ============================================================
+   Page transition
+   ============================================================ */
+.pt{ position:fixed; inset:0; z-index:1500; background:var(--black); transform:scaleY(0); transform-origin:bottom; pointer-events:none; display:grid; place-items:center; }
+
+.pt .logo{ height:56px; color:#EDE8E1; opacity:0; }
+
+.scroll-cue{ position:absolute; left:var(--pad); bottom:clamp(3.5rem,7vh,6rem); z-index:4; display:flex; align-items:center; gap:.9rem;
+  writing-mode:vertical-rl; font-size:.66rem; letter-spacing:.26em; text-transform:uppercase; color:rgba(255,255,255,.7); }
+
+.scroll-cue .bar{ width:1px; height:56px; background:rgba(255,255,255,.3); position:relative; overflow:hidden; }
+
+.scroll-cue .bar::after{ content:""; position:absolute; inset:0; background:#fff; animation:cue 2.4s var(--ease) infinite; }
+
+@keyframes cue{ 0%{transform:translateY(-100%)} 50%{transform:translateY(0)} 100%{transform:translateY(100%)} }
+
+.cursor{ position:fixed; top:0; left:0; z-index:5000; pointer-events:none; transform:translate(-50%,-50%); opacity:0; transition:opacity .3s; }
+
+.cursor__ring{ width:34px; height:34px; border:1px solid var(--accent); border-radius:50%; display:grid; place-items:center; transition:width .35s var(--ease), height .35s var(--ease), background .35s var(--ease); }
+
+.cursor__label{ font-size:.55rem; letter-spacing:.1em; text-transform:uppercase; color:#fff; opacity:0; transform:scale(.6); transition:.3s; text-align:center; padding:0 4px; }
+
+.cursor.is-hover .cursor__ring{ width:24px; height:24px; background:var(--accent); }
+
+.cursor.is-view .cursor__ring{ width:94px; height:94px; background:var(--accent); }
+
+.cursor.is-view .cursor__label{ opacity:1; transform:scale(1); }
+
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition-duration:.01ms !important; } }

@@ -1,0 +1,2 @@
+Dépose ici tes vidéos (portrait fondatrice, backstage, shootings, tournages, voyages).
+Puis référence-les dans index.html : <source src="assets/videos/ta-video.mp4" type="video/mp4">

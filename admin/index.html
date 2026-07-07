@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>AZUREA — Administration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="login">
+    <form class="login__card" id="loginForm" autocomplete="on">
+      <div class="login__logo">Azurea</div>
+      <div class="login__sub">Administration</div>
+      <div class="field"><label>Email</label><input type="email" id="email" required autocomplete="username" /></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="password" required autocomplete="current-password" /></div>
+      <button class="btn" style="width:100%;justify-content:center" type="submit" id="submit">Se connecter</button>
+      <p class="muted mt" id="msg" style="font-size:.8rem;text-align:center"></p>
+    </form>
+  </div>
+
+  <script src="../js/supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      const cfg = window.AZUREA_SUPABASE || {};
+      const msg = document.getElementById('msg');
+      if (!cfg.url || !cfg.anonKey) { msg.textContent = "⚠ Configure d'abord js/supabase-config.js"; return; }
+      const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
+      sb.auth.getSession().then(({ data }) => { if (data.session) location.href = 'app.html'; });
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submit'); btn.disabled = true; msg.textContent = 'Connexion…';
+        const { error } = await sb.auth.signInWithPassword({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        });
+        if (error) { msg.textContent = 'Identifiants incorrects.'; btn.disabled = false; }
+        else location.href = 'app.html';
+      });
+    })();
+  </script>
+</body>
+</html>

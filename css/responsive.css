@@ -1,0 +1,49 @@
+/* ===================================================================
+   AZUREA — responsive.css
+   Toutes les media-queries (mobile, tablette, desktop).
+   Chargé en dernier pour surcharger les styles de base.
+   =================================================================== */
+
+@media(max-width:700px){ .hero__float{ display:none; } }
+
+@media(min-width:900px){ .intro__grid{ grid-template-columns:1.1fr .9fr; align-items:end; } }
+
+@media(min-width:820px){ .proj--split{ grid-template-columns:1.2fr .8fr; } .proj--split.rev .proj__media{ order:2; } }
+
+@media(min-width:720px){ .proj--duo{ grid-template-columns:1fr 1fr; } .proj--duo .proj--tall{ height:clamp(400px,64vh,680px); } }
+
+@media(min-width:760px){ .feed{ grid-template-columns:repeat(6,1fr); } }
+
+@media(min-width:620px){ .logos{ grid-template-columns:repeat(4,1fr); } }
+
+@media(min-width:900px){ .xp{ grid-template-columns:.14fr .34fr 1fr; } }
+
+@media(max-width:620px){ .xp__list{ columns:1; } }
+
+@media(min-width:760px){ .stats{ grid-template-columns:repeat(4,1fr); } }
+
+@media(min-width:900px){ .phase{ grid-template-columns:.3fr 1fr; } }
+
+@media(min-width:720px){ .delays{ grid-template-columns:repeat(3,1fr); } }
+
+@media(min-width:900px){ .founder{ grid-template-columns:.85fr 1fr; } }
+
+@media(min-width:760px){ .vgrid{ grid-template-columns:repeat(4,1fr); } }
+
+@media(min-width:760px){ .vtile--wide{ grid-column:span 2; } }
+
+@media(min-width:760px){ .end__grid{ grid-template-columns:repeat(3,1fr); } }
+
+@media(min-width:820px){ .footer__top{ grid-template-columns:1.4fr 1fr; align-items:start; } .footer__cols{ grid-template-columns:repeat(3,1fr); } }
+
+@media(max-width:960px){
+  .nav__links,.nav__cta{ display:none; }
+  .nav__burger{ display:flex; flex-direction:column; gap:6px; width:34px; align-items:flex-end; background:none; border:none; cursor:pointer; color:inherit; }
+  .nav__burger span{ display:block; height:1px; width:28px; background:currentColor; transition:transform .4s var(--ease), opacity .3s; }
+  body.menu-open .nav__burger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  body.menu-open .nav__burger span:nth-child(2){ opacity:0; }
+  body.menu-open .nav__burger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+  body.menu-open .nav{ color:var(--ink); }
+}
+
+@media(min-width:961px){ .menu{ display:none; } }
