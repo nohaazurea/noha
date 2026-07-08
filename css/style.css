@@ -207,12 +207,12 @@ body.menu-open .menu__links a{ opacity:1; transform:none; }
 
 /* ---------- Home hero (page de garde) ---------- */
 .home-hero__inner{ position:relative; z-index:4; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:#fff; gap:clamp(1.3rem,3vw,2.2rem); padding-bottom:clamp(1.5rem,4vh,3rem); }
-
+.
 .home-hero__eyebrow{ color:rgba(255,255,255,.85); }
 
 .home-hero__eyebrow::before{ background:rgba(255,255,255,.7); }
 
-.home-hero__name{ font-family:var(--display); font-weight:400; font-size:clamp(3.4rem,15vw,12rem); line-height:.86; letter-spacing:.04em; text-transform:uppercase; }
+.home-hero__name{ font-family:var(--display); font-weight:400; font-size:clamp(2.8rem,11vw,8rem); line-height:.86; letter-spacing:.04em; text-transform:uppercase; }
 
 .home-hero__foot{ display:flex; flex-direction:column; align-items:center; gap:clamp(1.4rem,3vw,2rem); }
 
