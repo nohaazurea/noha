@@ -587,3 +587,13 @@ body.menu-open .menu__links a{ opacity:1; transform:none; }
 .btn--bare:hover{ gap:0; }
 .btn--light.btn--bare:hover{ background:none; color:#fff; border-color:transparent; }
 .btn--bare:hover::after{ transform:scaleX(.6); }
+
+/* En-tête de page avec image de fond (Services) */
+.pagehead--media{ position:relative; overflow:hidden; min-height:78vh; display:grid; place-items:center;
+  padding-top:clamp(9rem,17vh,14rem); padding-bottom:clamp(4rem,8vw,7rem); text-align:center; }
+.pagehead--media .bg-cover{ z-index:0; }
+.pagehead__scrim{ position:absolute; inset:0; z-index:1; background:rgba(14,13,12,.45); }
+.pagehead__inner{ position:relative; z-index:2; }
+.pagehead--media .pagehead__title{ color:#fff; }
+.pagehead--media .pagehead__title em{ color:var(--accent); }
+.pagehead--media .pagehead__sub{ color:rgba(255,255,255,.88); max-width:60ch; margin-left:auto; margin-right:auto; }
