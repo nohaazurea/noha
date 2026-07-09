@@ -580,3 +580,10 @@ body.menu-open .menu__links a{ opacity:1; transform:none; }
   color:#fff; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); cursor:pointer; font-size:.85rem; line-height:1;
   display:grid; place-items:center; transition:background .3s, border-color .3s; }
 .vidctrl:hover{ background:var(--accent); border-color:var(--accent); }
+/* Bouton texte souligné (hero accueil) */
+.btn--bare{ position:relative; border:none; border-radius:0; padding:0 0 .55rem; gap:0; }
+.btn--bare::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:currentColor; transform:scaleX(1); transform-origin:left; transition:transform .45s var(--ease); }
+.btn--bare:hover{ gap:0; }
+.btn--light.btn--bare:hover{ background:none; color:#fff; border-color:transparent; }
+.btn--bare:hover::after{ transform:scaleX(.6); }
