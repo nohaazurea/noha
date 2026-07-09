@@ -597,3 +597,5 @@ body.menu-open .menu__links a{ opacity:1; transform:none; }
 .pagehead--media .pagehead__title{ color:#fff; }
 .pagehead--media .pagehead__title em{ color:var(--accent); }
 .pagehead--media .pagehead__sub{ color:rgba(255,255,255,.88); max-width:60ch; margin-left:auto; margin-right:auto; }
+.pagehead--media .pagehead__title{ color:#fff; }
+.pagehead--media .pagehead__sub{ color:rgba(255,255,255,.88); }
