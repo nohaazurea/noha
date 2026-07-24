@@ -88,12 +88,9 @@
       const rev = i % 2 === 1 ? ' rev' : '';
       const cover = p.cover_url || '';
       const cat = [p.category === 'social' ? 'Réseaux sociaux' : p.category === 'web' ? 'Web' : 'Branding', p.location].filter(Boolean).join(' · ');
-      const CASE_ROUTES = ['kclub'];
-      const slug = (p.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '');
-      const href = CASE_ROUTES.includes(slug) ? '#/projet-' + slug : '#/realisations';
       return `
       <div class="proj proj--split${rev}" data-cat="${p.category || ''}" data-reveal>
-        <a href="${href}"data-link data-cursor="Voir le projet" class="proj__media"><img src="${cover}" alt="${escapeHtml(p.name)}" loading="lazy" data-zoom /></a>
+        <a href="#/projet" data-link data-cursor="Voir le projet" class="proj__media"><img src="${cover}" alt="${escapeHtml(p.name)}" loading="lazy" data-zoom /></a>
         <div class="proj__side">
           <span class="proj__cat">${escapeHtml(cat)}</span>
           <h3 class="proj__title" style="margin-top:.8rem">${escapeHtml(p.name)}</h3>

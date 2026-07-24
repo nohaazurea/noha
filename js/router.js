@@ -12,8 +12,8 @@
 window.AZUREA = window.AZUREA || {};
 (function (A) {
 
-  const ROUTES = ['accueil', 'expertises', 'realisations', 'projet', 'projet-kclub', 'methode', 'agence', 'contact'];
-  const TITLES = {'projet-kclub': 'K-Club Ubud — Étude de cas · AZUREA',
+  const ROUTES = ['accueil', 'expertises', 'realisations', 'projet', 'methode', 'agence', 'contact'];
+  const TITLES = {
     accueil:      'AZUREA — Agence de communication digitale premium',
     expertises:   'Expertises — AZUREA',
     realisations: 'Réalisations — AZUREA',
@@ -42,7 +42,7 @@ window.AZUREA = window.AZUREA || {};
     document.title = TITLES[route] || TITLES.accueil;
     document.querySelectorAll('[data-route-link]').forEach(a => a.classList.toggle('active', a.dataset.routeLink === route));
     /* nav opaque partout sauf sur les pages à hero sombre plein écran */
-    document.body.classList.toggle('solid-nav', !(route === 'accueil' || route === 'projet' || route === 'projet-kclub' || route === 'contact'));
+    document.body.classList.toggle('solid-nav', !(route === 'accueil' || route === 'projet' || route === 'contact'));
 
     A.clearTriggers();  // js/animations.js
     A.scrollTop();      // js/main.js
