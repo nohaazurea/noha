@@ -45,7 +45,7 @@ window.AZUREA = window.AZUREA || {};
     document.body.classList.toggle('solid-nav', !(route === 'accueil' || route === 'projet' || route === 'contact'));
 
     A.clearTriggers();  // js/animations.js
-    A.scrollTop();      // js/main.js
+    A.scrollTop();      // js/main.jsgit add -A
     A.onScroll();       // js/main.js
     playVideos(sec);
     A.animateIn(sec);   // js/animations.js
