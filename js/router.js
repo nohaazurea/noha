@@ -105,3 +105,9 @@ window.AZUREA = window.AZUREA || {};
   };
 
 })(window.AZUREA);
+
+const ugc = document.getElementById('ugcPanel');
+        const list = document.getElementById('projectsList');
+        if (f === 'contenu') { if (ugc) ugc.hidden = false; if (list) list.style.display = 'none'; }
+        else { if (ugc) ugc.hidden = true; if (list) list.style.display = ''; }
+        
