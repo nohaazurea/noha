@@ -629,3 +629,22 @@ body.menu-open .menu__links a{ opacity:1; transform:none; }
 .price__body{ padding:0 .2rem 1.6rem; max-width:60ch; color:var(--muted); font-size:.95rem; line-height:1.7; }
 .price summary::after{ content:"+"; position:absolute; right:.2rem; color:var(--accent); font-size:1.1rem; line-height:1; }
 .price[open] summary::after{ content:"–"; }
+
+/* ===== Délais (Méthode) — version stylée ===== */
+.delays{ display:grid; grid-template-columns:1fr; gap:1px; background:var(--line);
+  border:1px solid var(--line); margin-top:clamp(2.5rem,5vw,4rem); overflow:hidden; }
+.delays > div{ position:relative; background:var(--bg); text-align:center;
+  padding:clamp(2.8rem,5vw,4rem) clamp(1.6rem,3vw,2.4rem);
+  transition:background .5s ease; }
+.delays > div::before{ content:"Délai moyen"; display:block; font-size:.62rem; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:1.6rem; }
+.delays > div:nth-child(2)::before{ content:"Formule"; }
+.delays .d-num{ font-family:var(--display); font-weight:400; font-size:clamp(2.8rem,5.5vw,4rem);
+  line-height:1; letter-spacing:-.01em; }
+.delays .d-lab{ color:var(--muted); font-size:.9rem; letter-spacing:.02em;
+  margin-top:1.6rem; position:relative; padding-top:1.4rem; }
+.delays .d-lab::before{ content:""; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:24px; height:1px; background:var(--accent); transition:width .5s ease; }
+.delays > div:hover{ background:var(--bg-2); }
+.delays > div:hover .d-lab::before{ width:56px; }
+@media(min-width:760px){ .delays{ grid-template-columns:1fr 1fr 1fr; } }
