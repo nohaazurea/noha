@@ -648,3 +648,8 @@ body.menu-open .menu__links a{ opacity:1; transform:none; }
 .delays > div:hover{ background:var(--bg-2); }
 .delays > div:hover .d-lab::before{ width:56px; }
 @media(min-width:760px){ .delays{ grid-template-columns:1fr 1fr 1fr; } }
+.btn-contenu{ display:inline-flex; align-items:center; gap:.4rem; text-decoration:none;
+  color:var(--muted); border:1px solid var(--line); border-radius:100px;
+  padding:.55rem 1.2rem; font-size:.8rem; letter-spacing:.06em; transition:.3s; }
+.btn-contenu:hover{ border-color:var(--accent); color:var(--ink); }
+.btn-contenu span{ color:var(--accent); }
