@@ -27,7 +27,10 @@ window.AZUREA = window.AZUREA || {};
   let current  = null;
 
   A.parseHash = function () {
-    const r = (location.hash || '#/').replace(/^#\//, '').replace(/^#/, '').split('/')[0] || 'accueil';
+    const raw = (location.hash || '#/').replace(/^#\//, '').replace(/^#/, '');
+    const parts = raw.split('/');
+    const r = parts[0] || 'accueil';
+    A.projectSlug = (r === 'projet' && parts[1]) ? parts[1] : null;
     return ROUTES.includes(r) ? r : 'accueil';
   };
 
@@ -48,6 +51,7 @@ window.AZUREA = window.AZUREA || {};
     A.scrollTop();      // js/main.jsgit add -A
     A.onScroll();       // js/main.js
     playVideos(sec);
+    if (route === 'projet' && window.__AZ_fillProjectPage) window.__AZ_fillProjectPage();
     A.animateIn(sec);   // js/animations.js
   }
 

@@ -523,45 +523,29 @@
 <!-- ============================================================ PROJET (case study) ============================================================ -->
 <section class="route" data-route="projet">
   <div class="hero" style="height:clamp(440px,74vh,780px)">
-    <div class="hero__media"><div class="bg-cover bg-arch"></div></div>
+    <div class="hero__media"><div class="bg-cover bg-arch" id="pj-cover"></div></div>
     <div class="hero__scrim"></div>
     <div class="hero__inner container">
-      <span class="eyebrow hero__eyebrow" data-hero>Étude de cas · Saint-Émilion</span>
-      <h1 class="hero__title" data-hero-title style="font-size:clamp(2.8rem,8vw,6.4rem)"><span class="lm"><span>Citadelle</span></span></h1>
+      <span class="eyebrow hero__eyebrow" data-hero id="pj-eyebrow">Étude de cas</span>
+      <h1 class="hero__title" data-hero-title style="font-size:clamp(2.8rem,8vw,6.4rem)"><span class="lm"><span id="pj-title">Projet</span></span></h1>
     </div>
   </div>
-
   <section class="section container">
     <div class="stats" data-reveal-group>
-      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Client</div><div style="margin-top:.4rem">Citadelle</div></div>
-      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Secteur</div><div style="margin-top:.4rem">Vin · Saint-Émilion</div></div>
-      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Année</div><div style="margin-top:.4rem">2024</div></div>
-      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Prestations</div><div style="margin-top:.4rem">Branding · Réseaux · Print</div></div>
+      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Client</div><div style="margin-top:.4rem" id="pj-client">—</div></div>
+      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Secteur</div><div style="margin-top:.4rem" id="pj-secteur">—</div></div>
+      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Année</div><div style="margin-top:.4rem" id="pj-annee">—</div></div>
+      <div><div class="l" style="color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem">Prestations</div><div style="margin-top:.4rem" id="pj-prestations">—</div></div>
     </div>
-    <p class="lead" data-split style="margin-top:clamp(3rem,6vw,5rem)">Donner à une maison viticole une identité à la hauteur de son <em>terroir.</em></p>
+    <p class="lead" data-split style="margin-top:clamp(3rem,6vw,5rem)" id="pj-lead">—</p>
   </section>
-
-  <section class="section container" style="padding-top:0">
-    <div class="proj proj--duo">
-      <div class="proj__media proj--tall"><div class="bg-cover bg-cittag" data-zoom></div></div>
-      <div class="proj__media proj--tall"><div class="bg-cover bg-citx" data-zoom></div></div>
-    </div>
-    <div style="max-width:640px;margin:clamp(1rem,2vw,2rem) auto 0">
-      <div class="proj__media" style="aspect-ratio:826/1100"><div class="bg-cover bg-citgrid" data-zoom></div></div>
-    </div>
+  <section class="section container" style="padding-top:0" id="pj-gallery-wrap">
+    <div class="proj proj--duo" id="pj-gallery"></div>
   </section>
-
-  <section class="section dark"><div class="container stats" data-reveal-group>
-    <div><div class="n">+<span class="accent">180</span>%</div><div class="l">Engagement social</div></div>
-    <div><div class="n">×<span class="accent">3</span></div><div class="l">Croissance audience</div></div>
-    <div><div class="n"><span class="accent">4</span>–8</div><div class="l">Semaines de production</div></div>
-    <div><div class="n">100<span class="accent">%</span></div><div class="l">Cohérence de marque</div></div>
-  </div></section>
-
+  <section class="section dark" id="pj-stats-wrap"><div class="container stats" data-reveal-group id="pj-stats"></div></section>
   <section class="section container" style="text-align:center">
-    <p class="pullquote" data-split style="margin:0 auto">« AZUREA a compris notre lieu <em>avant</em> de le photographier. »</p>
-    <p class="quote-author" data-reveal style="margin-top:1.6rem">Maison Citadelle — Saint-Émilion</p>
-    <div class="note" data-reveal style="max-width:640px;margin-inline:auto;text-align:left"><b>Exemple réel — CITADELLE.</b> Ce format d'étude de cas se duplique pour chaque nouveau client (visuels, chiffres, témoignage).</div>
+    <p class="pullquote" data-split style="margin:0 auto" id="pj-quote"></p>
+    <p class="quote-author" data-reveal style="margin-top:1.6rem" id="pj-author"></p>
     <div style="margin-top:2.5rem" data-reveal><a class="btn btn--ink" href="#/realisations" data-link data-magnetic>Toutes les réalisations <span>→</span></a></div>
   </section>
 </section>

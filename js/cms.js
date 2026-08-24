@@ -82,6 +82,7 @@
 
   // ---- Reconstruction de la liste de projets (page Réalisations) ----
   function renderProjects(projects) {
+    window.__AZ_PROJECTS = projects || [];
     const list = document.getElementById('projectsList');
     if (!list || !projects || !projects.length) return;
     const html = projects.map((p, i) => {
@@ -91,8 +92,7 @@
       const slug = (p.slug || p.name || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
       return `
       <div class="proj proj--split${rev}" data-cat="${p.category || ''}" data-reveal>
-        <a href="#/projet" data-link data-cursor="Voir le projet" class="proj__media"><img src="${cover}" alt="${escapeHtml(p.name)}" loading="lazy" data-zoom /></a>
-        <div class="proj__side">
+        <a href="#/projet/${slug}" data-link data-cursor="Voir le projet" class="proj__media">
           <span class="proj__cat">${escapeHtml(cat)}</span>
           <h3 class="proj__title" style="margin-top:.8rem">${escapeHtml(p.name)}</h3>
           <p>${escapeHtml(p.description || '')}</p>
@@ -141,4 +141,59 @@
     // rafraîchit les déclencheurs d'animation après injection
     setTimeout(() => { try { if (window.ScrollTrigger) ScrollTrigger.refresh(); } catch (e) {} }, 60);
   }).catch(() => { /* repli : contenu d'origine conservé */ });
+  // ---- Remplissage de la page projet (étude de cas dynamique) ----
+  function fillProjectPage() {
+    const slug = window.AZUREA && window.AZUREA.projectSlug;
+    if (!slug) return;
+    const projects = window.__AZ_PROJECTS || [];
+    const mk = s => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const p = projects.find(x => mk(x.slug || x.name) === slug);
+    if (!p) return;
+
+    let cs = {};
+    try { cs = typeof p.case_study === 'string' ? JSON.parse(p.case_study || '{}') : (p.case_study || {}); } catch(e) { cs = {}; }
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.textContent = val; };
+    const cover = document.getElementById('pj-cover');
+    if (cover && p.cover_url) { cover.style.backgroundImage = `url('${p.cover_url}')`; cover.className = 'bg-cover'; }
+
+    set('pj-eyebrow', 'Étude de cas' + (p.location ? ' · ' + p.location : ''));
+    set('pj-title', p.name);
+    set('pj-client', p.name);
+    set('pj-secteur', cs.secteur || (p.category === 'social' ? 'Réseaux sociaux' : p.category === 'web' ? 'Web' : 'Branding'));
+    set('pj-annee', cs.annee || '—');
+    set('pj-prestations', cs.prestations || '—');
+    set('pj-lead', cs.context || p.description || '');
+
+    // Galerie
+    const g = document.getElementById('pj-gallery');
+    const gallery = Array.isArray(p.gallery) ? p.gallery : [];
+    if (g) {
+      if (gallery.length) {
+        g.innerHTML = gallery.map(url =>
+          `<div class="proj__media proj--tall"><div class="bg-cover" data-zoom style="background-image:url('${url}')"></div></div>`
+        ).join('');
+      } else {
+        const w = document.getElementById('pj-gallery-wrap'); if (w) w.style.display = 'none';
+      }
+    }
+
+    // Chiffres / résultats
+    const st = document.getElementById('pj-stats');
+    const results = Array.isArray(cs.results) ? cs.results : [];
+    if (st) {
+      if (results.length) {
+        st.innerHTML = results.map(r =>
+          `<div><div class="n">${escapeHtml(r.n || '')}</div><div class="l">${escapeHtml(r.l || '')}</div></div>`
+        ).join('');
+      } else {
+        const w = document.getElementById('pj-stats-wrap'); if (w) w.style.display = 'none';
+      }
+    }
+
+    // Citation
+    set('pj-quote', cs.quote ? '« ' + cs.quote + ' »' : '');
+    set('pj-author', cs.author || '');
+  }
+  window.__AZ_fillProjectPage = fillProjectPage;
 })();
