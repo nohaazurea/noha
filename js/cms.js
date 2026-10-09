@@ -92,7 +92,8 @@
       const slug = (p.slug || p.name || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
       return `
       <div class="proj proj--split${rev}" data-cat="${p.category || ''}" data-reveal>
-        <a href="#/projet/${slug}" data-link data-cursor="Voir le projet" class="proj__media">
+        <a href="#/projet/${slug}" data-link data-cursor="Voir le projet" class="proj__media"><img src="${cover}" alt="${escapeHtml(p.name)}" loading="lazy" data-zoom /></a>
+        <div class="proj__side">
           <span class="proj__cat">${escapeHtml(cat)}</span>
           <h3 class="proj__title" style="margin-top:.8rem">${escapeHtml(p.name)}</h3>
           <p>${escapeHtml(p.description || '')}</p>
@@ -167,16 +168,29 @@
 
     // Galerie
     const g = document.getElementById('pj-gallery');
-    const gallery = Array.isArray(p.gallery) ? p.gallery : [];
+    let gallery = Array.isArray(p.gallery) ? p.gallery.slice() : [];
+    if (p.video && p.video.trim()) gallery.push(p.video.trim());
     if (g) {
       if (gallery.length) {
-        g.innerHTML = gallery.map(url =>
-          `<div class="proj__media proj--tall"><div class="bg-cover" data-zoom style="background-image:url('${url}')"></div></div>`
-        ).join('');
+        g.innerHTML = gallery.map(url => {
+          // YouTube (youtu.be/xxx ou youtube.com/watch?v=xxx)
+          const yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
+          if (yt) {
+            return `<div class="pj-media pj-media--video"><iframe src="https://www.youtube.com/embed/${yt[1]}" title="Vidéo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+          }
+          // Fichier vidéo direct (.mp4, .mov...)
+          if (/\.(mp4|mov|webm|m4v)(\?|$)/i.test(url)) {
+            return `<div class="pj-media"><video src="${url}" controls playsinline preload="metadata"></video></div>`;
+          }
+          // Image
+          return `<div class="pj-media"><img src="${url}" alt="" loading="lazy" /></div>`;
+        }).join('');
       } else {
         const w = document.getElementById('pj-gallery-wrap'); if (w) w.style.display = 'none';
       }
     }
+    
+
 
     // Chiffres / résultats
     const st = document.getElementById('pj-stats');
@@ -197,3 +211,6 @@
   }
   window.__AZ_fillProjectPage = fillProjectPage;
 })();
+
+
+

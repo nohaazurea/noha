@@ -653,3 +653,165 @@ body.menu-open .menu__links a{ opacity:1; transform:none; }
   padding:.55rem 1.2rem; font-size:.8rem; letter-spacing:.06em; transition:.3s; }
 .btn-contenu:hover{ border-color:var(--accent); color:var(--ink); }
 .btn-contenu span{ color:var(--accent); }
+/* Page projet — description à taille raisonnable */
+#pj-lead{ font-size:clamp(1.1rem,2.2vw,1.5rem); line-height:1.5; max-width:70ch; }
+
+/* ===== Page projet — mise en forme du contexte ===== */
+#pj-lead{
+  font-family: var(--sans);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.7;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+  color: var(--ink);
+  max-width: 68ch;
+  margin-left: 0;
+  margin-right: auto;
+}
+/* ===== Page projet — contexte lisible (corrige le texte géant) ===== */
+.route[data-route="projet"] #pj-lead,
+#pj-lead{
+  font-family: var(--sans) !important;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem) !important;
+  line-height: 1.7 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  font-weight: 400 !important;
+  color: var(--ink) !important;
+  max-width: 70ch !important;
+  margin: clamp(2rem,4vw,3rem) auto 0 !important;
+  text-align: left !important;
+}
+/* ===== PAGE PROJET — présentation centrée & premium ===== */
+
+/* Le contexte : centré, lisible, respirant */
+.route[data-route="projet"] #pj-lead,
+#pj-lead{
+  font-family: var(--sans) !important;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem) !important;
+  line-height: 1.75 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  font-weight: 400 !important;
+  color: var(--ink) !important;
+  max-width: 64ch !important;
+  margin: clamp(2.5rem,5vw,4rem) auto 0 !important;
+  text-align: center !important;
+}
+
+/* Bloc infos client (Client/Secteur/Année/Prestations) : centré */
+.route[data-route="projet"] .stats{
+  text-align: center;
+  justify-items: center;
+}
+
+/* Bande de chiffres sombre : centrée */
+.route[data-route="projet"] .section.dark .stats{
+  text-align: center;
+  justify-items: center;
+}
+.route[data-route="projet"] .section.dark .n{ text-align: center; }
+.route[data-route="projet"] .section.dark .l{ text-align: center; }
+
+/* L'avis client : plus grand, plus aéré, vraiment mis en valeur */
+.route[data-route="projet"] .pullquote{
+  max-width: 22ch !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+.route[data-route="projet"] .quote-author{
+  text-align: center !important;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+/* ===== Avis client — présentation premium ===== */
+.route[data-route="projet"] #pj-quote{
+  position: relative;
+  max-width: 26ch !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem) !important;
+  line-height: 1.4 !important;
+}
+.route[data-route="projet"] #pj-quote::before{
+  content: "\201C";
+  display: block;
+  font-family: var(--display);
+  font-size: 4.5rem;
+  color: var(--accent);
+  line-height: .4;
+  margin-bottom: 1.8rem;
+}
+.route[data-route="projet"] #pj-author{
+  text-align: center !important;
+  margin-top: 2.2rem !important;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-size: .72rem;
+  color: var(--muted);
+  position: relative;
+  padding-top: 1.8rem;
+}
+.route[data-route="projet"] #pj-author::before{
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 44px; height: 1px;
+  background: var(--accent);
+}
+
+/* ===== Galerie page projet — images entières, non rognées ===== */
+.route[data-route="projet"] #pj-gallery{
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+}
+.route[data-route="projet"] #pj-gallery .proj__media{
+  height: auto !important;
+  aspect-ratio: auto !important;
+  overflow: visible;
+}
+.route[data-route="projet"] #pj-gallery .bg-cover{
+  position: relative !important;
+  inset: auto !important;
+  width: 100%;
+  height: auto !important;
+  background: none !important;
+}
+
+/* ===== Galerie page projet — médias entiers (non rognés) ===== */
+.route[data-route="projet"] #pj-gallery{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem,2vw,2rem);
+  align-items: start;
+}
+.route[data-route="projet"] #pj-gallery .pj-media img,
+.route[data-route="projet"] #pj-gallery .pj-media video{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 2px;
+}
+@media(max-width:700px){
+  .route[data-route="projet"] #pj-gallery{ grid-template-columns: 1fr; }
+}
+/* Vidéo YouTube dans la galerie projet */
+.route[data-route="projet"] #pj-gallery .pj-media--video{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  grid-column: 1 / -1;
+}
+.route[data-route="projet"] #pj-gallery .pj-media--video iframe{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 2px;
+}

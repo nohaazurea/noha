@@ -1,37 +1,509 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>AZUREA — Back-office</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="admin.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AZUREA — Back-office</title>
+<link rel="icon" href="../favicon/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#FAF8F5; --panel:#fff; --bg-2:#F1ECE4; --ink:#141210; --muted:#6A655E;
+  --accent:#B28A5B; --line:rgba(20,18,16,.12); --ok:#3f7d5b; --danger:#b4553f;
+  --display:'Belleza',serif; --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{ font-family:var(--sans); background:var(--bg); color:var(--ink); font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; }
+h1,h2,h3{ font-family:var(--display); font-weight:400; letter-spacing:-.01em; }
+input,textarea,select,button{ font-family:inherit; font-size:14px; color:inherit; }
+
+/* Login */
+.login{ min-height:100vh; display:grid; place-items:center; padding:1.5rem; }
+.login__card{ width:100%; max-width:380px; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:2.4rem; }
+.login__logo{ font-family:var(--display); font-size:1.6rem; letter-spacing:.24em; text-transform:uppercase; text-align:center; margin-bottom:.4rem; }
+.login__sub{ text-align:center; color:var(--muted); font-size:.82rem; letter-spacing:.14em; text-transform:uppercase; margin-bottom:2rem; }
+
+/* Layout */
+.layout{ display:grid; grid-template-columns:238px 1fr; min-height:100vh; }
+.side{ background:var(--panel); border-right:1px solid var(--line); padding:1.6rem 1rem; display:flex; flex-direction:column; gap:.2rem; position:sticky; top:0; height:100vh; }
+.side__logo{ font-family:var(--display); font-size:1.25rem; letter-spacing:.2em; text-transform:uppercase; padding:.4rem .8rem 1.4rem; }
+.side a{ display:flex; align-items:center; gap:.7rem; padding:.62rem .8rem; border-radius:6px; color:var(--muted); text-decoration:none; letter-spacing:.02em; transition:.2s; cursor:pointer; }
+.side a:hover{ background:var(--bg-2); color:var(--ink); }
+.side a.active{ background:var(--ink); color:var(--bg); }
+.side__foot{ margin-top:auto; padding-top:1rem; border-top:1px solid var(--line); }
+.main{ padding:2rem clamp(1.2rem,3vw,3rem); max-width:1100px; }
+.head{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; margin-bottom:2rem; flex-wrap:wrap; }
+.head h1{ font-size:clamp(1.8rem,3vw,2.6rem); }
+.eyebrow{ font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; }
+
+/* Forms */
+.field{ margin-bottom:1.1rem; }
+.field label{ display:block; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:.4rem; }
+.field input, .field textarea, .field select{ width:100%; background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:.65rem .8rem; transition:.2s; }
+.field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color:var(--accent); }
+.field textarea{ resize:vertical; min-height:80px; font-family:var(--sans); }
+.field textarea.code{ font-family:ui-monospace,Menlo,monospace; font-size:12.5px; }
+.row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.row-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+@media(max-width:640px){ .row,.row-3{ grid-template-columns:1fr; } .layout{ grid-template-columns:1fr; } .side{ position:static; height:auto; flex-direction:row; overflow-x:auto; } .side__logo,.side__foot{ display:none; } }
+
+/* Buttons */
+.btn{ display:inline-flex; align-items:center; gap:.5rem; border:1px solid var(--ink); background:var(--ink); color:var(--bg);
+  padding:.62rem 1.2rem; border-radius:100px; cursor:pointer; letter-spacing:.08em; text-transform:uppercase; font-size:.74rem; transition:.2s; }
+.btn:hover{ background:var(--accent); border-color:var(--accent); }
+.btn--ghost{ background:transparent; color:var(--ink); }
+.btn--ghost:hover{ background:var(--bg-2); color:var(--ink); border-color:var(--ink); }
+.btn--sm{ padding:.4rem .8rem; font-size:.68rem; }
+.btn--danger{ background:transparent; color:var(--danger); border-color:var(--danger); }
+.btn--danger:hover{ background:var(--danger); color:#fff; }
+.btn--block{ width:100%; justify-content:center; }
+
+/* Cards / stats */
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+.stat{ background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:1.4rem; }
+.stat .n{ font-family:var(--display); font-size:2.2rem; } .stat .l{ color:var(--muted); font-size:.8rem; }
+
+/* Project list */
+.plist{ display:flex; flex-direction:column; gap:.6rem; }
+.pitem{ display:grid; grid-template-columns:28px 60px 1fr auto; align-items:center; gap:1rem; background:var(--panel);
+  border:1px solid var(--line); border-radius:8px; padding:.7rem .9rem; }
+.pitem.dragging{ opacity:.4; }
+.pitem__handle{ cursor:grab; color:var(--muted); text-align:center; user-select:none; }
+.pitem__thumb{ width:60px; height:44px; object-fit:cover; border-radius:5px; background:var(--bg-2); }
+.pitem__name{ font-weight:500; } .pitem__meta{ color:var(--muted); font-size:.8rem; }
+.tag{ display:inline-block; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); border:1px solid var(--line); border-radius:100px; padding:.15rem .6rem; }
+
+/* Media grid */
+.media{ position:relative; aspect-ratio:1; background:var(--bg-2); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.media img{ width:100%; height:100%; object-fit:cover; }
+.media__bar{ position:absolute; inset:auto 0 0 0; background:rgba(14,13,12,.7); display:flex; gap:.4rem; padding:.4rem; justify-content:center; opacity:0; transition:.2s; }
+.media:hover .media__bar{ opacity:1; }
+.media__bar button{ background:none; border:none; color:#fff; cursor:pointer; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; }
+.media__bar button:hover{ color:var(--accent); }
+
+/* Modal */
+.modal{ position:fixed; inset:0; z-index:50; background:rgba(14,13,12,.5); display:none; place-items:start center; overflow:auto; padding:2rem 1rem; }
+.modal.open{ display:grid; }
+.modal__card{ width:100%; max-width:760px; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:2rem; }
+.modal__card h2{ font-size:1.6rem; margin-bottom:1.4rem; }
+
+/* Misc */
+.toast{ position:fixed; bottom:1.2rem; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg);
+  padding:.7rem 1.3rem; border-radius:100px; font-size:.8rem; opacity:0; transition:.3s; z-index:100; pointer-events:none; }
+.toast.show{ opacity:1; }
+.muted{ color:var(--muted); } .mt{ margin-top:1.4rem; } .mb{ margin-bottom:1rem; }
+.section-list a{ display:flex; justify-content:space-between; padding:.9rem 1rem; background:var(--panel); border:1px solid var(--line); border-radius:8px; text-decoration:none; margin-bottom:.5rem; transition:.2s; cursor:pointer; }
+.section-list a:hover{ border-color:var(--accent); }
+.hint{ background:var(--bg-2); border-left:3px solid var(--accent); padding:.9rem 1.1rem; font-size:.84rem; color:var(--muted); border-radius:6px; }
+.thumbline{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+.thumbline .t{ position:relative; width:70px; height:70px; border-radius:6px; overflow:hidden; border:1px solid var(--line); }
+.thumbline .t img{ width:100%; height:100%; object-fit:cover; }
+.thumbline .t button{ position:absolute; top:3px; right:3px; background:rgba(0,0,0,.65); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:12px; line-height:1; }
+.subhead{ font-family:var(--display); font-size:1.15rem; margin:1.6rem 0 .8rem; padding-bottom:.4rem; border-bottom:1px solid var(--line); }
+.resrow{ display:grid; grid-template-columns:120px 1fr auto; gap:.6rem; margin-bottom:.5rem; }
+.resrow input{ width:100%; background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:.5rem .7rem; }
+.addline{ background:none; border:1px dashed var(--line); border-radius:6px; padding:.5rem; width:100%; cursor:pointer; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; font-size:.7rem; }
+.addline:hover{ border-color:var(--accent); color:var(--accent); }
+.err{ color:var(--danger); font-size:.8rem; margin-top:.4rem; }
+</style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="side">
-      <div class="side__logo">Azurea</div>
-      <a href="#dashboard" data-nav>Tableau de bord</a>
-      <a href="#contenu" data-nav>Contenu</a>
-      <a href="#projets" data-nav>Réalisations</a>
-      <a href="#medias" data-nav>Médias</a>
-      <a href="#parametres" data-nav>Paramètres</a>
-      <div class="side__foot">
-        <a href="../index.html" target="_blank">↗ Voir le site</a>
-        <a href="#" id="logout">Se déconnecter</a>
-      </div>
-    </aside>
-    <main class="main" id="panel"><p class="muted">Chargement…</p></main>
+
+<!-- ===== LOGIN ===== -->
+<div class="login" id="loginView" style="display:none">
+  <div class="login__card">
+    <div class="login__logo">AZUREA</div>
+    <div class="login__sub">Back-office</div>
+    <div class="field"><label>Email</label><input id="l_email" type="email" autocomplete="username" /></div>
+    <div class="field"><label>Mot de passe</label><input id="l_pass" type="password" autocomplete="current-password" /></div>
+    <button class="btn btn--block" id="l_submit">Se connecter</button>
+    <div class="err" id="l_err" style="display:none"></div>
+    <div class="hint mt" id="l_cfgwarn" style="display:none">⚠ La configuration Supabase est introuvable. Vérifie que <b>js/supabase-config.js</b> existe à la racine du site.</div>
   </div>
+</div>
 
-  <div class="modal" id="modal"><div class="modal__card" id="modalCard"></div></div>
-  <div class="toast" id="toast"></div>
+<!-- ===== APP ===== -->
+<div class="layout" id="appView" style="display:none">
+  <aside class="side">
+    <div class="side__logo">AZUREA</div>
+    <a data-nav="dashboard">Tableau de bord</a>
+    <a data-nav="contenu">Contenu du site</a>
+    <a data-nav="projets">Réalisations</a>
+    <a data-nav="medias">Médias</a>
+    <a data-nav="parametres">Paramètres</a>
+    <div class="side__foot">
+      <a href="../index.html" target="_blank">↗ Voir le site</a>
+      <a id="logout">Se déconnecter</a>
+    </div>
+  </aside>
+  <main class="main" id="panel"></main>
+</div>
 
-  <script src="../js/supabase-config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="admin.js"></script>
+<!-- Modal + toast -->
+<div class="modal" id="modal"><div class="modal__card" id="modalCard"></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- Supabase config + lib -->
+<script src="../js/supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  "use strict";
+  const cfg = window.AZUREA_SUPABASE || {};
+  const $ = (s, r = document) => r.querySelector(s);
+  const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); };
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  const openModal = html => { $('#modalCard').innerHTML = html; $('#modal').classList.add('open'); };
+  const closeModal = () => $('#modal').classList.remove('open');
+  window.AZADMIN = { close: closeModal };
+  $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+  if (!cfg.url || !cfg.anonKey) {
+    $('#loginView').style.display = 'grid';
+    $('#l_cfgwarn').style.display = 'block';
+    return;
+  }
+  const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
+
+  /* ---------- Image optimise + upload ---------- */
+  function optimizeImage(file, max = 1600, q = 0.82) {
+    return new Promise(res => {
+      if (!file.type.startsWith('image/') || file.type === 'image/svg+xml' || file.type === 'image/gif') { res(file); return; }
+      const isPng = file.type === 'image/png';
+      const img = new Image(); const url = URL.createObjectURL(file);
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (Math.max(w, h) > max) { if (w >= h) { h = Math.round(h * max / w); w = max; } else { w = Math.round(w * max / h); h = max; } }
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        c.toBlob(b => { URL.revokeObjectURL(url); res(b || file); }, isPng ? 'image/png' : 'image/jpeg', q);
+      };
+      img.onerror = () => res(file);
+      img.src = url;
+    });
+  }
+  async function uploadToStorage(file) {
+    const blob = await optimizeImage(file);
+    const ext = blob.type === 'image/png' ? 'png' : blob.type === 'image/jpeg' ? 'jpg' : (file.name.split('.').pop() || 'bin');
+    const path = Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+    const { error } = await sb.storage.from('media').upload(path, blob, { upsert: false, contentType: blob.type });
+    if (error) { toast('Erreur upload'); throw error; }
+    return sb.storage.from('media').getPublicUrl(path).data.publicUrl;
+  }
+
+  /* ---------- Auth ---------- */
+  async function boot() {
+    const { data } = await sb.auth.getSession();
+    if (!data.session) { showLogin(); return; }
+    showApp();
+  }
+  function showLogin() {
+    $('#appView').style.display = 'none';
+    $('#loginView').style.display = 'grid';
+    $('#l_submit').onclick = doLogin;
+    $('#l_pass').onkeydown = e => { if (e.key === 'Enter') doLogin(); };
+  }
+  async function doLogin() {
+    $('#l_err').style.display = 'none';
+    const email = $('#l_email').value.trim(), password = $('#l_pass').value;
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) { $('#l_err').textContent = 'Identifiants incorrects.'; $('#l_err').style.display = 'block'; return; }
+    showApp();
+  }
+  function showApp() {
+    $('#loginView').style.display = 'none';
+    $('#appView').style.display = 'grid';
+    $('#logout').onclick = async e => { e.preventDefault(); await sb.auth.signOut(); showLogin(); };
+    document.querySelectorAll('[data-nav]').forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.nav); });
+    go('dashboard');
+  }
+  const panel = $('#panel');
+  function go(name) {
+    document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === name));
+    ({ dashboard: renderDashboard, contenu: renderContenu, projets: renderProjets, medias: renderMedias, parametres: renderParametres }[name] || renderDashboard)();
+  }
+
+  /* ---------- Dashboard ---------- */
+  async function renderDashboard() {
+    const { count } = await sb.from('projects').select('*', { count: 'exact', head: true });
+    panel.innerHTML = `<div class="head"><div><div class="eyebrow">Back-office</div><h1>Tableau de bord</h1></div></div>
+      <div class="grid">
+        <div class="stat"><div class="n">${count || 0}</div><div class="l">Réalisations</div></div>
+        <div class="stat"><div class="n"><a data-nav="projets" style="text-decoration:none">Gérer ›</a></div><div class="l">Projets &amp; études de cas</div></div>
+        <div class="stat"><div class="n"><a href="../index.html" target="_blank" style="text-decoration:none">↗</a></div><div class="l">Voir le site</div></div>
+      </div>
+      <div class="hint mt">Ce que tu enregistres ici apparaît sur le site <b>au rechargement de la page</b>. Le design et les animations ne changent pas : seul le contenu est dynamique. Après une modification sur le site en ligne, pense à recharger en forçant (Cmd+Shift+R).</div>`;
+    panel.querySelectorAll('[data-nav]').forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.nav); });
+  }
+
+  /* ---------- Contenu (sections) ---------- */
+  async function renderContenu() {
+    const { data, error } = await sb.from('sections').select('key,label').order('key');
+    if (error) { panel.innerHTML = `<div class="hint">Erreur de lecture des sections.</div>`; return; }
+    panel.innerHTML = `<div class="head"><div><div class="eyebrow">Contenu</div><h1>Contenu du site</h1></div></div>
+      <div class="section-list">${(data || []).map(s => `<a data-sec="${esc(s.key)}"><span>${esc(s.label || s.key)}</span><span class="muted">${esc(s.key)} ›</span></a>`).join('')}</div>
+      <div class="hint mt">Chaque bloc correspond à une zone de texte/image du site. Les champs simples s'éditent directement ; les listes et blocs structurés s'éditent en JSON (format indenté, vérifié avant enregistrement).</div>`;
+    panel.querySelectorAll('[data-sec]').forEach(a => a.onclick = e => { e.preventDefault(); editSection(a.dataset.sec); });
+  }
+  async function editSection(key) {
+    const { data } = await sb.from('sections').select('*').eq('key', key).single();
+    const d = data.data || {};
+    const fields = Object.keys(d).map(k => {
+      const v = d[k];
+      if (typeof v === 'string') {
+        const long = v.length > 60 || v.includes('<');
+        return `<div class="field"><label>${esc(k)}</label>${long ? `<textarea data-k="${esc(k)}">${esc(v)}</textarea>` : `<input data-k="${esc(k)}" value="${esc(v)}"/>`}</div>`;
+      }
+      return `<div class="field"><label>${esc(k)} — JSON</label><textarea class="code" data-k="${esc(k)}" data-json="1">${esc(JSON.stringify(v, null, 2))}</textarea></div>`;
+    }).join('');
+    openModal(`<h2>${esc(data.label || key)}</h2>${fields}
+      <div class="mt"><button class="btn" id="save">Enregistrer</button> <button class="btn btn--ghost" onclick="AZADMIN.close()">Annuler</button></div>`);
+    $('#save').onclick = async () => {
+      const out = {}; let bad = false;
+      $('#modalCard').querySelectorAll('[data-k]').forEach(el => {
+        const k = el.dataset.k;
+        if (el.dataset.json) { try { out[k] = JSON.parse(el.value); } catch (e) { bad = k; out[k] = d[k]; } }
+        else out[k] = el.value;
+      });
+      if (bad) { toast('JSON invalide : ' + bad); return; }
+      const { error } = await sb.from('sections').update({ data: out }).eq('key', key);
+      if (error) toast('Erreur'); else { toast('Enregistré'); closeModal(); }
+    };
+  }
+
+  /* ---------- Réalisations ---------- */
+  async function renderProjets() {
+    const { data: projects } = await sb.from('projects').select('*').order('position');
+    panel.innerHTML = `<div class="head"><div><div class="eyebrow">Réalisations</div><h1>Projets</h1></div>
+        <button class="btn" id="add">+ Nouveau projet</button></div>
+      <div class="plist" id="plist">${(projects || []).map(rowHtml).join('')}</div>
+      <div class="hint mt">Glisse-dépose les projets par la poignée ⠿ pour changer l'ordre (enregistré automatiquement). « Modifier » ouvre la fiche complète : galerie, vidéo, étude de cas, SEO.</div>`;
+    $('#add').onclick = () => editProject(null);
+    bindDrag();
+    panel.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => editProject(b.dataset.edit));
+    panel.querySelectorAll('[data-del]').forEach(b => b.onclick = () => delProject(b.dataset.del));
+  }
+  function rowHtml(p) {
+    return `<div class="pitem" draggable="true" data-id="${p.id}">
+      <div class="pitem__handle" title="Glisser">⠿</div>
+      <img class="pitem__thumb" src="${esc(p.cover_url || '')}" alt=""/>
+      <div><div class="pitem__name">${esc(p.name)} ${p.published ? '' : '<span class="muted">· masqué</span>'}</div>
+        <div class="pitem__meta"><span class="tag">${esc(p.category || '')}</span> ${esc(p.location || '')}</div></div>
+      <div style="display:flex;gap:.5rem"><button class="btn btn--ghost btn--sm" data-edit="${p.id}">Modifier</button>
+        <button class="btn btn--danger btn--sm" data-del="${p.id}">Suppr.</button></div>
+    </div>`;
+  }
+  function bindDrag() {
+    const list = $('#plist'); let dragEl = null;
+    list.querySelectorAll('.pitem').forEach(it => {
+      it.addEventListener('dragstart', () => { dragEl = it; it.classList.add('dragging'); });
+      it.addEventListener('dragover', e => {
+        e.preventDefault();
+        const after = [...list.querySelectorAll('.pitem:not(.dragging)')].find(x => {
+          const r = x.getBoundingClientRect(); return e.clientY < r.top + r.height / 2;
+        });
+        if (after) list.insertBefore(dragEl, after); else list.appendChild(dragEl);
+      });
+      it.addEventListener('dragend', async () => {
+        it.classList.remove('dragging');
+        const ids = [...list.querySelectorAll('.pitem')].map(x => x.dataset.id);
+        await Promise.all(ids.map((id, i) => sb.from('projects').update({ position: i + 1 }).eq('id', id)));
+        toast('Ordre enregistré');
+      });
+    });
+  }
+
+  async function editProject(id) {
+    let p = { name:'', category:'social', location:'', description:'', cover_url:'', gallery:[], video_url:'', prestations:[], case_study:{}, seo:{}, published:true };
+    if (id) { const { data } = await sb.from('projects').select('*').eq('id', id).single(); p = data; }
+    let gallery = [...(p.gallery || [])]; let coverUrl = p.cover_url || '';
+    const cs = (p.case_study && typeof p.case_study === 'object') ? p.case_study : {};
+    let results = Array.isArray(cs.results) ? cs.results.slice() : [];
+    const seo = p.seo || {};
+
+    openModal(`<h2>${id ? 'Modifier' : 'Nouveau'} projet</h2>
+
+      <div class="field"><label>Nom du client</label><input id="f_name" value="${esc(p.name)}"/></div>
+      <div class="row">
+        <div class="field"><label>Catégorie</label><select id="f_cat">${['social','web','branding'].map(c => `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+        <div class="field"><label>Lieu</label><input id="f_loc" value="${esc(p.location)}"/></div>
+      </div>
+      <div class="field"><label>Description (texte de la vignette)</label><textarea id="f_desc">${esc(p.description)}</textarea></div>
+
+      <div class="field"><label>Image de couverture</label>
+        <div class="thumbline"><div class="t" id="coverT">${coverUrl ? `<img src="${esc(coverUrl)}"/>` : ''}</div></div>
+        <input type="file" accept="image/*" id="f_cover" class="mt"/></div>
+
+      <div class="field"><label>Galerie — images</label>
+        <div class="thumbline" id="galT"></div>
+        <input type="file" accept="image/*" multiple id="f_gal" class="mt"/>
+        <div class="mt" style="display:flex;gap:.5rem">
+          <input id="f_galurl" placeholder="Coller un lien d'image (Cloudinary…)" />
+          <button class="btn btn--ghost btn--sm" id="f_galadd" type="button">Ajouter</button>
+        </div>
+      </div>
+
+      <div class="field"><label>Vidéo — URL (YouTube, Cloudinary .mp4/.mov…)</label><input id="f_video" value="${esc(p.video_url || '')}"/></div>
+
+      <div class="subhead">Étude de cas</div>
+      <div class="field"><label>Titre / accroche</label><input id="f_titre" value="${esc(cs.titre || '')}"/></div>
+      <div class="row-3">
+        <div class="field"><label>Secteur</label><input id="f_secteur" value="${esc(cs.secteur || '')}"/></div>
+        <div class="field"><label>Année</label><input id="f_annee" value="${esc(cs.annee || '')}"/></div>
+        <div class="field"><label>Prestations (résumé)</label><input id="f_prest" value="${esc(cs.prestations || (p.prestations || []).join(' · '))}"/></div>
+      </div>
+      <div class="field"><label>Contexte / présentation</label><textarea id="f_context">${esc(cs.context || '')}</textarea></div>
+      <div class="field"><label>Objectifs (un par ligne)</label><textarea id="f_objectifs">${esc((cs.objectifs || []).join('\n'))}</textarea></div>
+
+      <div class="field"><label>Chiffres clés</label>
+        <div id="resWrap"></div>
+        <button class="addline" id="resAdd" type="button">+ Ajouter un chiffre</button>
+      </div>
+
+      <div class="row">
+        <div class="field"><label>Citation client</label><textarea id="f_quote">${esc(cs.quote || '')}</textarea></div>
+        <div class="field"><label>Auteur de la citation</label><input id="f_author" value="${esc(cs.author || '')}"/></div>
+      </div>
+
+      <div class="subhead">Référencement (SEO)</div>
+      <div class="row">
+        <div class="field"><label>Titre SEO</label><input id="f_seotitle" value="${esc(seo.title || '')}"/></div>
+        <div class="field"><label>Description SEO</label><input id="f_seodesc" value="${esc(seo.description || '')}"/></div>
+      </div>
+
+      <div class="field"><label><input type="checkbox" id="f_pub" ${p.published ? 'checked' : ''} style="width:auto"/> &nbsp;Publié (visible sur le site)</label></div>
+
+      <div class="mt"><button class="btn" id="save">Enregistrer</button> <button class="btn btn--ghost" onclick="AZADMIN.close()">Annuler</button></div>`);
+
+    function rerenderGal() {
+      $('#galT').innerHTML = gallery.map((u, i) => `<div class="t"><img src="${esc(u)}"/><button data-g="${i}" type="button">×</button></div>`).join('');
+      $('#galT').querySelectorAll('[data-g]').forEach(b => b.onclick = () => { gallery.splice(+b.dataset.g, 1); rerenderGal(); });
+    }
+    rerenderGal();
+    function rerenderRes() {
+      $('#resWrap').innerHTML = results.map((r, i) => `<div class="resrow">
+        <input data-rn="${i}" value="${esc(r.n || '')}" placeholder="700+" />
+        <input data-rl="${i}" value="${esc(r.l || '')}" placeholder="Participants" />
+        <button class="btn btn--danger btn--sm" data-rx="${i}" type="button">×</button></div>`).join('');
+      $('#resWrap').querySelectorAll('[data-rx]').forEach(b => b.onclick = () => { results.splice(+b.dataset.rx, 1); rerenderRes(); });
+      $('#resWrap').querySelectorAll('[data-rn]').forEach(el => el.oninput = () => results[+el.dataset.rn].n = el.value);
+      $('#resWrap').querySelectorAll('[data-rl]').forEach(el => el.oninput = () => results[+el.dataset.rl].l = el.value);
+    }
+    rerenderRes();
+    $('#resAdd').onclick = () => { results.push({ n:'', l:'' }); rerenderRes(); };
+
+    $('#f_cover').onchange = async e => { if (e.target.files[0]) { toast('Upload…'); coverUrl = await uploadToStorage(e.target.files[0]); $('#coverT').innerHTML = `<img src="${coverUrl}"/>`; toast('Image ajoutée'); } };
+    $('#f_gal').onchange = async e => { for (const f of e.target.files) { toast('Upload…'); gallery.push(await uploadToStorage(f)); } rerenderGal(); toast('Galerie mise à jour'); };
+    $('#f_galadd').onclick = () => { const u = $('#f_galurl').value.trim(); if (u) { gallery.push(u); $('#f_galurl').value = ''; rerenderGal(); } };
+
+    $('#save').onclick = async () => {
+      const prestStr = $('#f_prest').value.trim();
+      const case_study = {
+        titre: $('#f_titre').value.trim(),
+        secteur: $('#f_secteur').value.trim(),
+        annee: $('#f_annee').value.trim(),
+        prestations: prestStr,
+        context: $('#f_context').value.trim(),
+        objectifs: $('#f_objectifs').value.split('\n').map(x => x.trim()).filter(Boolean),
+        results: results.filter(r => (r.n || r.l)),
+        quote: $('#f_quote').value.trim(),
+        author: $('#f_author').value.trim()
+      };
+      const rec = {
+        name: $('#f_name').value, category: $('#f_cat').value, location: $('#f_loc').value, description: $('#f_desc').value,
+        cover_url: coverUrl, gallery, video_url: $('#f_video').value,
+        prestations: prestStr ? prestStr.split('·').map(x => x.trim()).filter(Boolean) : (p.prestations || []),
+        case_study, seo: { title: $('#f_seotitle').value, description: $('#f_seodesc').value }, published: $('#f_pub').checked
+      };
+      let error;
+      if (id) { ({ error } = await sb.from('projects').update(rec).eq('id', id)); }
+      else { rec.position = 999; ({ error } = await sb.from('projects').insert(rec)); }
+      if (error) toast('Erreur à l\'enregistrement'); else { toast('Projet enregistré'); closeModal(); renderProjets(); }
+    };
+  }
+  async function delProject(id) {
+    if (!confirm('Supprimer définitivement ce projet ?')) return;
+    const { error } = await sb.from('projects').delete().eq('id', id);
+    if (error) toast('Erreur'); else { toast('Projet supprimé'); renderProjets(); }
+  }
+
+  /* ---------- Médias ---------- */
+  async function renderMedias() {
+    panel.innerHTML = `<div class="head"><div><div class="eyebrow">Bibliothèque</div><h1>Médias</h1></div>
+        <label class="btn" for="up">+ Uploader</label></div>
+      <input type="file" id="up" accept="image/*" multiple style="display:none"/>
+      <div class="grid" id="mgrid"><p class="muted">Chargement…</p></div>
+      <div class="hint mt">Les images sont redimensionnées (≤ 1600 px) et compressées à l'upload. « Copier » place l'URL dans le presse-papier pour la coller où tu veux.</div>`;
+    $('#up').onchange = async e => { for (const f of e.target.files) { toast('Upload…'); await uploadToStorage(f); } toast('Ajouté'); loadMedia(); };
+    loadMedia();
+  }
+  async function loadMedia() {
+    const { data } = await sb.storage.from('media').list('', { limit: 300, sortBy: { column: 'created_at', order: 'desc' } });
+    const grid = $('#mgrid');
+    const files = (data || []).filter(f => f.name && f.name !== '.emptyFolderPlaceholder');
+    if (!files.length) { grid.innerHTML = '<p class="muted">Aucun média pour l\'instant.</p>'; return; }
+    grid.innerHTML = files.map(f => {
+      const url = sb.storage.from('media').getPublicUrl(f.name).data.publicUrl;
+      return `<div class="media"><img src="${esc(url)}" loading="lazy"/><div class="media__bar">
+        <button data-copy="${esc(url)}">Copier</button><button data-del="${esc(f.name)}">Suppr.</button></div></div>`;
+    }).join('');
+    grid.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => { navigator.clipboard.writeText(b.dataset.copy); toast('URL copiée'); });
+    grid.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+      if (!confirm('Supprimer ce média ?')) return;
+      await sb.storage.from('media').remove([b.dataset.del]); toast('Supprimé'); loadMedia();
+    });
+  }
+
+  /* ---------- Paramètres ---------- */
+  async function renderParametres() {
+    const { data: s } = await sb.from('settings').select('*').eq('id', 1).single();
+    const f = (s && s.footer) || {};
+    panel.innerHTML = `<div class="head"><div><div class="eyebrow">Configuration</div><h1>Paramètres</h1></div></div>
+      <div class="row">
+        <div class="field"><label>Logo (URL)</label><input id="p_logo" value="${esc(s.logo_url || '')}"/><input type="file" accept="image/*" id="up_logo" class="mt"/></div>
+        <div class="field"><label>Favicon (URL)</label><input id="p_fav" value="${esc(s.favicon_url || '')}"/><input type="file" accept="image/*" id="up_fav" class="mt"/></div>
+      </div>
+      <div class="field"><label>Titre du site (SEO)</label><input id="p_title" value="${esc(s.site_title || '')}"/></div>
+      <div class="field"><label>Description (SEO)</label><textarea id="p_desc">${esc(s.site_description || '')}</textarea></div>
+      <div class="row">
+        <div class="field"><label>Image OpenGraph (URL)</label><input id="p_og" value="${esc(s.og_image || '')}"/></div>
+        <div class="field"><label>Google Analytics (G-XXXX)</label><input id="p_ga" value="${esc(s.analytics_id || '')}"/></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Email</label><input id="p_email" value="${esc(s.email || '')}"/></div>
+        <div class="field"><label>Téléphone</label><input id="p_phone" value="${esc(s.phone || '')}"/></div>
+      </div>
+      <div class="field"><label>Adresse</label><input id="p_addr" value="${esc(s.address || '')}"/></div>
+      <div class="row">
+        <div class="field"><label>Instagram (URL)</label><input id="p_ig" value="${esc(s.instagram || '')}"/></div>
+        <div class="field"><label>TikTok (URL)</label><input id="p_tt" value="${esc(s.tiktok || '')}"/></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>LinkedIn (URL)</label><input id="p_li" value="${esc(s.linkedin || '')}"/></div>
+        <div class="field"><label>Lien devis (URL)</label><input id="p_devis" value="${esc(s.devis_url || '')}"/></div>
+      </div>
+      <div class="field"><label>Footer — accroche</label><textarea id="p_flead">${esc(f.lead || '')}</textarea></div>
+      <div class="field"><label>Footer — copyright</label><input id="p_fcopy" value="${esc(f.copyright || '')}"/></div>
+      <div class="mt"><button class="btn" id="save">Enregistrer</button></div>`;
+    $('#up_logo').onchange = async e => { if (e.target.files[0]) { toast('Upload…'); $('#p_logo').value = await uploadToStorage(e.target.files[0]); toast('Logo ajouté'); } };
+    $('#up_fav').onchange = async e => { if (e.target.files[0]) { toast('Upload…'); $('#p_fav').value = await uploadToStorage(e.target.files[0]); toast('Favicon ajouté'); } };
+    $('#save').onclick = async () => {
+      const rec = {
+        logo_url: $('#p_logo').value, favicon_url: $('#p_fav').value, site_title: $('#p_title').value, site_description: $('#p_desc').value,
+        og_image: $('#p_og').value, analytics_id: $('#p_ga').value, email: $('#p_email').value, phone: $('#p_phone').value, address: $('#p_addr').value,
+        instagram: $('#p_ig').value, tiktok: $('#p_tt').value, linkedin: $('#p_li').value, devis_url: $('#p_devis').value,
+        footer: { lead: $('#p_flead').value, copyright: $('#p_fcopy').value }
+      };
+      const { error } = await sb.from('settings').update(rec).eq('id', 1);
+      if (error) toast('Erreur'); else toast('Paramètres enregistrés');
+    };
+  }
+
+  boot();
+})();
+</script>
 </body>
 </html>
