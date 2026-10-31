@@ -92,7 +92,7 @@
       const slug = (p.slug || p.name || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
       return `
       <div class="proj proj--split${rev}" data-cat="${p.category || ''}" data-reveal>
-        <a href="#/projet/${slug}" data-link data-cursor="Voir le projet" class="proj__media"><img src="${cover}" alt="${escapeHtml(p.name)}" loading="lazy" data-zoom /></a>
+        <a href="/projet/${slug}" data-link data-cursor="Voir le projet" class="proj__media"><img src="${cover}" alt="${escapeHtml(p.name)}" loading="lazy" data-zoom /></a>
         <div class="proj__side">
           <span class="proj__cat">${escapeHtml(cat)}</span>
           <h3 class="proj__title" style="margin-top:.8rem">${escapeHtml(p.name)}</h3>
@@ -118,7 +118,7 @@
         e.preventDefault();
         const href = a.getAttribute('href');
         if (window.AZUREA && window.AZUREA.toggleMenu) window.AZUREA.toggleMenu(false);
-        location.hash = href;
+        if (window.AZUREA && window.AZUREA.go) window.AZUREA.go(href); else window.location.href = href;
       });
     });
   }
@@ -139,6 +139,7 @@
     applySettings(settings);
     if (C.partners) renderPartners(C.partners);
     renderProjects(projects);
+    if (window.AZUREA && window.AZUREA.projectSlug) { try { fillProjectPage(); } catch (e) {} }
     // rafraîchit les déclencheurs d'animation après injection
     setTimeout(() => { try { if (window.ScrollTrigger) ScrollTrigger.refresh(); } catch (e) {} }, 60);
   }).catch(() => { /* repli : contenu d'origine conservé */ });
@@ -165,6 +166,7 @@
     set('pj-annee', cs.annee || '—');
     set('pj-prestations', cs.prestations || '—');
     set('pj-lead', cs.context || p.description || '');
+    if (window.AZUREA && window.AZUREA.setMeta) window.AZUREA.setMeta('projet', { title: p.name + ' — Étude de cas · AZUREA', desc: (cs.context || p.description || '').toString().replace(/\s+/g,' ').slice(0,155) });
 
     // Galerie
     const g = document.getElementById('pj-gallery');

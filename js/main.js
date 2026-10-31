@@ -72,8 +72,14 @@ window.addEventListener('load', function () {
   });
 
   /* ---- Démarrage : loader puis affichage de la route courante ---- */
-  if (!location.hash) location.hash = '#/';
-  A.runLoader(function () {          // js/animations.js
-    A.navigate(A.parseHash(), false); // js/router.js
+  A.runLoader(function () {                 // js/animations.js
+    var r = A.parseHash();                  // js/router.js
+    // Nettoie les anciennes URLs #/ en vraies URLs (SEO)
+    if (location.hash && location.hash.indexOf('#/') === 0) {
+      var clean = (r === 'accueil' && !A.projectSlug) ? '/'
+                : A.projectSlug ? '/projet/' + A.projectSlug : '/' + r;
+      try { history.replaceState({}, '', clean); } catch (e) {}
+    }
+    A.navigate(r, false);                   // js/router.js
   });
 });

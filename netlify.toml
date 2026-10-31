@@ -1,7 +1,8 @@
 # ============================================================
 #  AZUREA — Configuration Netlify
-#  Site 100% statique (aucune étape de build).
-#  Le site public ET le back-office /admin sont servis tels quels.
+#  Site statique. Routage par vraies URLs (History API) :
+#  toute URL inconnue est servie par index.html (l'app gère la route).
+#  Les fichiers réels (css, js, assets, /admin, sitemap, robots) priment.
 # ============================================================
 
 [build]
@@ -21,3 +22,9 @@
   for = "/admin/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# Fallback SPA : les vraies URLs (/expertises, /projet/xxx…) renvoient index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
